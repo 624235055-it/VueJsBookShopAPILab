@@ -64,6 +64,66 @@ app.get(apiversion + '/student/:studentid',  function (req, res)  {
 
 });
 
+//get student การบ้าน
+app.get(apiversion + '/student',  function (req, res)  {  
+
+  res.setHeader('Content-Type', 'application/json');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  
+  db.query('SELECT * FROM student', function (error, results, fields) {
+      if (error) throw error;
+      return res.send({ error: false, message: 'student list', data: results });
+  });
+
+  
+});
+
+
+//put student
+app.put(apiversion + '/student/:studentid',  function (req, res)  {  
+
+  var studentid = req.body.studentid;
+  var studentName = req.body.studentName;
+
+
+  res.setHeader('Content-Type', 'application/json');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  
+  db.query(`UPDATE student 
+            Set
+               studentid = '${studentid}',
+               studentName = '${studentName}'
+  
+            where studentid='${studentid}';`,function (error, results, fields) {
+    if (error) throw error;
+    return res.send({ error: false, message: ' Modified student' });
+   });
+
+});
+
+
+//Delte student
+app.delete(apiversion + '/student/:studentid',  function (req, res)  {  
+
+  var studentid = req.params.studentid;
+
+  res.setHeader('Co2ntent-Type', 'application/json');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+  
+  db.query(`DELETE from student WHERE studentid =${studentid};`,function (error, results, fields) {
+      if (error) throw error;
+      return res.send({ error: false, message: ' Modified student' });
+  });
+
+   
+});
+
+
 
 
 
@@ -128,7 +188,7 @@ app.put(apiversion + '/book/:bookid',  function (req, res)  {
     
  
 
-//Add new student
+//Add new student post
 app.post(apiversion + '/student',  function (req, res) {
 
   var studentid = req.body.studentid
@@ -161,3 +221,5 @@ app.put(apiversion + '/book/:bookid',  function (req, res)  {
 app.listen(port, function () {
     console.log("Server is up and running...");
 });
+
+
